@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body,
+      .container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .item {
+        width: 20%;
+        height: 20%;
+        position: absolute;
+        box-sizing: border-box;
+        padding: 10px;
+      }
+      .txt {
+        z-index: 999;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        box-shadow: 0px 0px 12px #e0e1e2;
+        box-sizing: border-box;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(20px);
+      }
+      /* From uiverse.io by @adamgiebl */
+      button {
+        color: #090909;
+        padding: 0.7em 1.7em;
+        font-size: 18px;
+        border-radius: 0.5em;
+        background: #e8e8e8;
+        border: 1px solid #e8e8e8;
+        transition: all 0.3s;
+        box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+        box-sizing: border-box;
+      }
+
+      button:hover {
+        border: 3px solid white;
+      }
+
+      button:active {
+        box-shadow: 4px 4px 12px #c5c5c5, -4px -4px 12px #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <button class="bind">提示框</button>
+      <!-- <div class="item">
+        <div class="txt">
+          <button class="move">关闭</button>
+        </div>
+      </div> -->
+    </div>
+
+    <script>
+      let container = document.querySelector(".container");
+      let bind = document.querySelector(".bind");
+
+      //绑定事件
+      //dom:移动的元素
+      function bindEvent(dom) {
+        dom.onmousemove = function (e) {
+          let item = document.querySelector(".item");
+          item.style.top = `${e.y}px`;
+          item.style.left = `${e.x}px`;
+        };
+      }
+
+      //移除事件
+      function moveEvent(dom) {
+        dom.remove();
+      }
+
+      //点击bind
+      bind.onclick = function (event) {
+        //这里就可以替换成节点生成的方式(两种方式)
+        //以及拥有节点
+        //  let item = document.querySelector(".item");
+        //or
+        //直接创建节点
+        if (document.querySelector(".item") || null) {
+          moveEvent(document.querySelector(".item"));
+        }
+        let item = document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `<div class="txt">
+                              <button class="move">关闭</button>
+                              <span>提示：单击脱离跟随来关闭</span>
+                           </div>`;
+        //阻止事件冒泡，因为我用了一个window.onclick
+        event.stopPropagation();
+        container.appendChild(item);
+
+        let move = document.querySelector(".move");
+        bindEvent(container);
+        move.onclick = function () {
+          moveEvent(item);
+        };
+      };
+
+      window.onclick = function () {
+        container.onmousemove = "";
+      };
+    </script>
+  </body>
+</html>
