@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body,
+      .container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+      }
+      .timer {
+        width: 75vw;
+        height: 25vw;
+        display: flex;
+      }
+      .timer > div {
+        width: 50%;
+        box-sizing: border-box;
+        padding: 10px;
+        position: relative;
+      }
+      .timer > div span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .timer > div > .timer-bg {
+        position: relative;
+        height: 100%;
+      }
+      .timer > div > .timer-bg > .bg-item {
+        height: 50%;
+        box-sizing: border-box;
+        padding: 5px;
+      }
+      .timer > div > .timer-bg > .bg-item > div {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 1);
+        box-shadow: 0px 0px 4px #333;
+      }
+      .timer > div > .timer-bg > .bg-item:nth-child(1) > div {
+        border-radius: 5% 5% 0% 0% / 10% 10% 0% 0%;
+      }
+      .timer > div > .timer-bg > .bg-item:nth-child(2) > div {
+        border-radius: 0% 0% 5% 5% / 0% 0% 10% 10%;
+      }
+      .content-top-bg {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 50%;
+        box-sizing: border-box;
+
+        padding: 5px;
+      }
+      .content-top-bg > div {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        border-radius: 5% 5% 0% 0% / 10% 10% 0% 0%;
+        box-shadow: 0px 0px 4px #333;
+      }
+      .hour,
+      .sec {
+      }
+      span {
+        font-size: 15vw;
+        font-weight: bold;
+      }
+      .btn-tran {
+        background-image: linear-gradient(
+          0deg,
+          #000 0%,
+          #000 49.99%,
+          transparent 50%,
+          transparent 100%
+        );
+      }
+      .top-tran {
+        background-image: linear-gradient(
+          0deg,
+          transparent 0%,
+          transparent 49.99%,
+          #000 50%,
+          #000 100%
+        );
+      }
+      .content-top-bg[data-bgactive] {
+        transform-origin: center bottom;
+        border: 2px solid #333;
+        animation: timer-bg 900ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      }
+      .content-top-span {
+        transform-origin: center center;
+        transform: rotateX(0deg);
+      }
+      .content-top-span[data-bgactive] {
+        animation: timer-top-span 450ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      }
+      .content-btn-span {
+        transform-origin: center center;
+        transform: rotateX(-90deg);
+      }
+      .content-btn-bg {
+        transform: rotateX(0deg);
+      }
+      .content-btn-span[data-spanactive-btn] {
+        animation: timer-span-btn 900ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      }
+      .bg-shadow[data-shadow] {
+        animation: bg-shadow 400ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      }
+      .bg-shadow {
+        position: absolute;
+        width: 100%;
+        height: 50%;
+        background-image: radial-gradient(
+          circle at 50% 100%,
+          rgba(0, 0, 0, 0.5) 0%,
+          rgba(0, 0, 0, 0) 50%
+        );
+        top: 0;
+        transform: rotateX(90deg);
+        transform-origin: center bottom;
+      }
+
+      @keyframes timer-top-span {
+        0% {
+          opacity: 1;
+          transform: rotateX(0deg);
+        }
+        100% {
+          opacity: 0;
+          transform: rotateX(90deg);
+        }
+      }
+      @keyframes timer-span-btn {
+        0% {
+          transform: rotateX(-90deg);
+        }
+        100% {
+          transform: rotateX(0deg);
+        }
+      }
+      @keyframes timer-bg {
+        0% {
+          transform: rotateX(0deg);
+        }
+        100% {
+          border: none;
+          transform: rotateX(180deg);
+        }
+      }
+      @keyframes bg-shadow {
+        0% {
+          background-image: radial-gradient(
+            circle at 50% 100%,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0) 0%
+          );
+          transform: rotateX(90deg);
+        }
+        100% {
+          background-image: radial-gradient(
+            circle at 50% 100%,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0) 80%
+          );
+          transform: rotateX(180deg);
+        }
+      }
+      /* .test {
+        color: aliceblue;
+      } */
+    </style>
+  </head>
+  <body>
+    <!-- <div class="test"></div> -->
+    <div class="container">
+      <div class="timer">
+        <div class="timer-hour">
+          <div class="timer-bg">
+            <div class="bg-item">
+              <div></div>
+            </div>
+            <div class="bg-item">
+              <div></div>
+            </div>
+          </div>
+        </div>
+        <div class="timer-minu">
+          <div class="timer-bg">
+            <div class="bg-item">
+              <div></div>
+            </div>
+            <div class="bg-item">
+              <div></div>
+            </div>
+          </div>
+        </div>
+        <div class="timer-sec">
+          <div class="timer-bg">
+            <div class="bg-item">
+              <div></div>
+            </div>
+            <div class="bg-item">
+              <div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <audio src="./audio/audio.mp3" controls></audio> -->
+    </div>
+
+    <script>
+      let date = new Date();
+      let h = date.getHours();
+      let m = date.getMinutes();
+      let s = 0;
+      let test = new Date().getSeconds();
+      // setInterval(() => {
+      //   document.querySelector(".test").innerHTML = test;
+      //   test++;
+      // }, 1000);
+      //内容加载
+      window.onload = function () {
+        let secDom = document.querySelector(".timer-sec >.timer-bg");
+        s = new Date().getSeconds();
+        createEl(secDom, { val: s, max: 59 });
+        //   createEl(secDom, { val: s, max: 59 });
+
+        let minuDom = document.querySelector(".timer-minu >.timer-bg");
+        createEl(minuDom, { val: m, max: 59 });
+        let hourDom = document.querySelector(".timer-hour >.timer-bg");
+        createEl(hourDom, { val: h, max: 23 });
+
+        animation(
+          document.querySelector(".timer-sec >.timer-bg>.timer-content")
+        );
+      };
+      function play() {}
+
+      function animation(content) {
+        s++;
+        roll(content, s);
+        if (s >= 59) {
+          s = -1;
+        }
+        if (m >= 59) {
+          m = -1;
+          h++;
+        }
+        if (h >= 23) {
+          h = 0;
+        }
+
+        if (s == 0) {
+          m++;
+          roll(
+            document.querySelector(".timer-minu >.timer-bg>.timer-content"),
+            m
+          );
+        }
+        if (s == 0 && m == 0) {
+          roll(
+            document.querySelector(".timer-hour >.timer-bg>.timer-content"),
+            h >= 23 ? -1 : h
+          );
+        }
+        setTimeout(function () {
+          animation(
+            document.querySelector(".timer-sec >.timer-bg>.timer-content")
+          );
+        }, 1000);
+      }
+      function createEl(node, obj) {
+        /**
+         *
+         * 步骤
+         * （一）、创建下面的dom
+         * 1.下一个数字上面部分作为背景
+         * 2.当前数字底部部分
+         * 3.旋转90度之后或提前开始旋转背景层的shadow
+         * 4.需要旋转的背景层
+         * 5.当前旋转层数字
+         * 6.下一个数字的下面部分
+         *
+         */
+
+        let content = document.createElement("div");
+        content.className = "timer-content";
+
+        //下一个数字作为背景
+        let nextNumTop = document.createElement("span");
+        nextNumTop.className = "top-tran";
+
+        let newVal = obj.val + 1 >= obj.max ? -1 : obj.val;
+        console.log(newVal);
+        nextNumTop.innerHTML =
+          newVal + 1 < 10 ? "0" + (newVal + 1) : newVal + 1;
+
+        //当前数字底部部分
+        let currNumBtn = document.createElement("span");
+        currNumBtn.className = "btn-tran content-btn-bg";
+        currNumBtn.innerHTML = obj.val < 10 ? "0" + obj.val : obj.val;
+
+        //旋转90度之后或提前开始旋转背景层的shadow
+        let shadow = document.createElement("div");
+        shadow.className = "bg-shadow";
+
+        //需要旋转的背景层
+        let topBg = document.createElement("div");
+        topBg.innerHTML = "<div><div>";
+        topBg.className = "content-top-bg";
+
+        //旋转层当前数字
+        let currNumTop = document.createElement("span");
+        currNumTop.className = "top-tran content-top-span";
+        currNumTop.innerHTML = obj.val < 10 ? "0" + obj.val : obj.val;
+
+        //下一个数字的下面部分
+        let nextNumBtn = document.createElement("span");
+        nextNumBtn.className = "btn-tran content-btn-span";
+        nextNumBtn.innerHTML =
+          newVal + 1 < 10 ? "0" + (newVal + 1) : newVal + 1;
+
+        //根据图层顺序添加
+        //接下来的数字 span
+        content.appendChild(nextNumTop);
+        //当前数字下面部分 span
+        content.appendChild(currNumBtn);
+        //阴影部分 div
+        content.appendChild(shadow);
+        //翻转白色部分 div
+        content.appendChild(topBg);
+        //当前数字上面部分 span
+        content.appendChild(currNumTop);
+        //当前数字上面部分 span
+        content.appendChild(nextNumBtn);
+
+        //节点添加到dom中
+        node.appendChild(content);
+      }
+      function roll(content, s) {
+        let spans = content.querySelectorAll("span");
+        let divs = content.querySelectorAll("div");
+        spans[1].setAttribute("data-span-btn", "");
+        divs[0].setAttribute("data-shadow", "");
+        divs[1].setAttribute("data-bgactive", "");
+        spans[2].setAttribute("data-bgactive", "");
+        spans[3].setAttribute("data-spanactive-btn", "");
+        setTimeout(function () {
+          spans[0].className = spans[1].className;
+          spans[3].className = spans[2].className;
+          divs[0].removeAttribute("data-shadow");
+          divs[1].removeAttribute("data-bgactive");
+          spans[2].remove();
+          spans[1].remove();
+          let nextNumTop = document.createElement("span");
+          nextNumTop.className = "top-tran";
+          if (s >= 59) {
+            s = -1;
+          }
+          console.log(s);
+          nextNumTop.innerHTML = s + 1 < 10 ? "0" + (s + 1) : s + 1;
+          let nextNumBtn = document.createElement("span");
+          nextNumBtn.className = "btn-tran content-btn-span";
+          nextNumBtn.innerHTML = s + 1 < 10 ? "0" + (s + 1) : s + 1;
+          content.insertBefore(nextNumTop, spans[0]);
+          content.appendChild(nextNumBtn);
+        }, 900);
+      }
+    </script>
+  </body>
+</html>
