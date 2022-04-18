@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
+      :root {
+        --contentSpace: 1%;
+        --bgColor: red;
+      }
       * {
         margin: 0;
         padding: 0;
@@ -29,7 +33,7 @@
       .timer > div {
         width: 50%;
         box-sizing: border-box;
-        padding: 10px;
+        padding: var(--contentSpace);
         position: relative;
       }
       .timer > div span {
@@ -55,7 +59,7 @@
       .timer > div > .timer-bg > .bg-item {
         height: 50%;
         box-sizing: border-box;
-        padding: 5px;
+        padding: var(--contentSpace);
       }
       .timer > div > .timer-bg > .bg-item > div {
         width: 100%;
@@ -76,7 +80,7 @@
         height: 50%;
         box-sizing: border-box;
 
-        padding: 5px;
+        padding: var(--contentSpace);
       }
       .content-top-bg > div {
         width: 100%;
